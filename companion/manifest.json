@@ -1,28 +1,28 @@
 {
 	"$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
 	"type": "connection",
-	"id": "your-module-name",
-	"name": "your-module-name",
-	"shortname": "module-shortname",
-	"description": "A short one line description of your module",
-	"version": "0.0.0",
+	"id": "allenheath-dt168",
+	"name": "Allen & Heath DT168",
+	"shortname": "DT168",
+	"description": "Direct DT168 preamp gain, pad and phantom control over the Dante primary network",
+	"version": "1.0.0-beta.1",
 	"license": "MIT",
-	"repository": "git+https://github.com/bitfocus/companion-module-your-module-name.git",
-	"bugs": "https://github.com/bitfocus/companion-module-your-module-name/issues",
 	"maintainers": [
 		{
-			"name": "Your name",
-			"email": "Your email"
+			"name": "MiniFido",
+			"github": "MiniFido"
 		}
 	],
 	"runtime": {
-		"type": "node26",
+		"type": "node22",
 		"api": "nodejs-ipc",
 		"apiVersion": "0.0.0",
-		"entrypoint": "../src/main.js"
+		"entrypoint": "../src/entry.mjs"
 	},
 	"legacyIds": [],
-	"manufacturer": "Your company",
-	"products": ["Your product"],
-	"keywords": []
+	"manufacturer": "Allen & Heath",
+	"products": ["DT168"],
+	"keywords": ["Dante", "preamp", "gain", "phantom"],
+	"repository": "git+https://github.com/bitfocus/companion-module-allenheath-dt168.git",
+	"bugs": "https://github.com/bitfocus/companion-module-allenheath-dt168/issues"
 }

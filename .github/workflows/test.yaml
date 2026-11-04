@@ -1,0 +1,22 @@
+name: Tests and formatting
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn test
+      - run: yarn format:check
+      - run: yarn check

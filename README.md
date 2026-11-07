@@ -2,7 +2,7 @@
 
 Independent community module for direct control of the 16 microphone preamps in an Allen & Heath DT168. Maintained by [MiniFido](https://github.com/MiniFido).
 
-**Public beta candidate: 1.0.0-beta.1.** Target: Companion 5.0+ (module API 2.1), tested by the maintainer on Companion 5.1.0 with DT168 control firmware V1.4. Repository allocation and Bitfocus review are pending. The planned Bitfocus repository links in the manifest must be confirmed after allocation.
+**Public beta candidate: 1.0.0-beta.2.** Target: Companion 5.0+ (module API 2.1), tested by the maintainer on Companion 5.1.0 with DT168 control firmware V1.4.
 
 ## Features
 
@@ -16,7 +16,7 @@ Select the DT168 IPv4 address and the local network interface on the Dante prima
 
 ## Build and test
 
-Use Node.js 22.20 or later in the 22.x release line and the pinned Yarn version:
+Use Node.js 26.x and the pinned Yarn version:
 
 ```sh
 corepack enable
@@ -24,10 +24,10 @@ yarn install --immutable
 yarn test
 yarn format:check
 yarn check
-yarn package
+yarn package --prerelease
 ```
 
-The package command marks the output as a prerelease. For the official release, push a version tag and submit that tag with **Is Prerelease** enabled in the Bitfocus Developer Portal. A GitHub release alone does not submit it for Bitfocus review.
+Pass `--prerelease` when building a local beta package. For the official release, push a version tag and submit that tag with **Is Prerelease** enabled in the Bitfocus Developer Portal. A GitHub release alone does not submit it for Bitfocus review.
 
 ## Beta scope
 

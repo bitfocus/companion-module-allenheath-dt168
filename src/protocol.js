@@ -1,4 +1,3 @@
-'use strict'
 const VENDOR = Buffer.from('AllenHth')
 function envelope(id, seq, body) {
 	if (!Buffer.isBuffer(id) || id.length !== 8) throw Error('Controller ID must contain eight bytes')
@@ -71,4 +70,4 @@ function values(state) {
 		phantom: !!(state.flags & 2),
 	}
 }
-module.exports = { poll, set, decode, gainToRaw, values }
+export { poll, set, decode, gainToRaw, values }

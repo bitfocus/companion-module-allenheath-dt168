@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0-beta.2
+
+- Adopt the Bitfocus JavaScript template, Node.js 26, shared formatting and Yarn dependency protections.
+- Report a clear error when refreshing while disconnected.
+- Skip cancelled preamp writes and publish only changed Companion values.
+- Document valid pad and phantom state expressions.
+
 ## 1.0.0-beta.1
 
 First candidate for public beta distribution through Bitfocus.

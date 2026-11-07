@@ -1,6 +1,8 @@
-const { test } = require('node:test')
-const assert = require('node:assert/strict')
-const p = require('../src/protocol')
+import { test } from 'node:test'
+import assert from 'node:assert/strict'
+import * as p from '../src/protocol.js'
+import Instance, { UpgradeScripts } from '../src/main.js'
+import { DTClient } from '../src/client.js'
 const id = Buffer.from('0200000000010000', 'hex')
 const full =
 	'ffff004c007800000200000000020000416c6c656e487468010300005599010099000099000099000099000099006c99002b9900449900449900449900449900449900449900449900449900'
@@ -52,7 +54,6 @@ test('all sixteen channel encodings preserve gain and combined flags', () => {
 	}
 })
 test('Companion 5 entrypoint works with the real base library and complete host context', async () => {
-	const { default: Instance, UpgradeScripts } = require('../src/main')
 	assert.equal(UpgradeScripts.length, 0)
 	const captured = {}
 	const context = {
@@ -80,6 +81,8 @@ test('Companion 5 entrypoint works with the real base library and complete host 
 		updateStatus: () => {},
 	}
 	const inst = new Instance(context)
+	const errors = []
+	inst.log = (level, message) => errors.push({ level, message })
 	inst.define()
 	assert.equal(Object.keys(captured.actions).length, 5)
 	assert.equal(Object.keys(captured.presets).length, 64)
@@ -106,5 +109,48 @@ test('Companion 5 entrypoint works with the real base library and complete host 
 	inst.online = false
 	inst.publish()
 	assert.equal(captured.values.connected, 0)
+	captured.values = null
+	inst.publish()
+	assert.equal(captured.values, null)
+	await captured.actions.refresh.callback({ options: {} })
+	assert.deepEqual(errors, [{ level: 'error', message: 'DT168 is not connected' }])
+	let refreshed = false
+	inst.online = true
+	inst.client = {
+		refresh: async () => {
+			refreshed = true
+		},
+	}
+	await captured.actions.refresh.callback({ options: {} })
+	assert.ok(refreshed)
 	assert.ok(inst.getConfigFields().every((f) => Number.isFinite(f.width)))
+})
+
+test('cancelled changes send no write while queued or after refreshing', async () => {
+	const client = Object.create(DTClient.prototype)
+	const queued = new AbortController()
+	let release
+	client.tail = new Promise((resolve) => {
+		release = resolve
+	})
+	let refreshes = 0
+	client.refresh = async () => {
+		refreshes++
+	}
+	client.send = () => assert.fail('Cancelled change must not send a preamp command')
+	const change = client.change(1, (state) => state, queued.signal)
+	queued.abort()
+	release()
+	await assert.rejects(change, { name: 'AbortError' })
+	assert.equal(refreshes, 0)
+
+	const reading = new AbortController()
+	client.states = new Map([[1, { rawGain: 38144, flags: 0, seen: 1 }]])
+	client.refresh = async () => {
+		reading.abort()
+	}
+	await assert.rejects(
+		client.change(1, (state) => ({ ...state, flags: 2 }), reading.signal),
+		{ name: 'AbortError' },
+	)
 })

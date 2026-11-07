@@ -5,7 +5,7 @@
 	"name": "Allen & Heath DT168",
 	"shortname": "DT168",
 	"description": "Direct DT168 preamp gain, pad and phantom control over the Dante primary network",
-	"version": "1.0.0-beta.1",
+	"version": "1.0.0-beta.2",
 	"license": "MIT",
 	"maintainers": [
 		{
@@ -14,10 +14,10 @@
 		}
 	],
 	"runtime": {
-		"type": "node22",
+		"type": "node26",
 		"api": "nodejs-ipc",
 		"apiVersion": "0.0.0",
-		"entrypoint": "../src/entry.mjs"
+		"entrypoint": "../src/main.js"
 	},
 	"legacyIds": [],
 	"manufacturer": "Allen & Heath",

@@ -1,26 +1,27 @@
 {
 	"name": "companion-module-allenheath-dt168",
-	"version": "1.0.0-beta.1",
+	"version": "1.0.0-beta.2",
 	"private": true,
-	"type": "commonjs",
-	"main": "src/entry.mjs",
+	"type": "module",
+	"main": "src/main.js",
 	"scripts": {
-		"package": "companion-module-build --prerelease",
-		"test": "node --test test/*.test.cjs",
+		"package": "companion-module-build",
+		"test": "node --test test/*.test.js",
 		"check": "companion-module-check",
 		"format": "prettier --write src test companion .github *.md *.json",
 		"format:check": "prettier --check src test companion .github *.md *.json"
 	},
 	"license": "MIT",
 	"engines": {
-		"node": "^22.20 || ^26.5"
+		"node": "^26",
+		"yarn": "^4"
 	},
 	"dependencies": {
-		"@companion-module/base": "2.1.3"
+		"@companion-module/base": "~2.1.3"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "3.1.1",
-		"prettier": "3.9.9"
+		"@companion-module/tools": "^3.1.1",
+		"prettier": "^3.9.9"
 	},
 	"packageManager": "yarn@4.18.1",
 	"repository": {
@@ -29,5 +30,6 @@
 	},
 	"bugs": {
 		"url": "https://github.com/bitfocus/companion-module-allenheath-dt168/issues"
-	}
+	},
+	"prettier": "@companion-module/tools/.prettierrc.json"
 }

@@ -1,7 +1,9 @@
 node_modules/
-.yarn/
-pkg/
-*.tgz
+package-lock.json
+/pkg
+/*.tgz
+DEBUG-*
+/.yarn
 coverage/
 *.log
 .DS_Store

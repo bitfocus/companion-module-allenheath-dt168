@@ -1,9 +1,9 @@
-'use strict'
-const { EventEmitter } = require('node:events')
-const dgram = require('node:dgram')
-const os = require('node:os')
-const p = require('./protocol')
-class DTClient extends EventEmitter {
+import { EventEmitter } from 'node:events'
+import dgram from 'node:dgram'
+import os from 'node:os'
+import * as p from './protocol.js'
+
+export class DTClient extends EventEmitter {
 	constructor(host, localAddress, options = {}) {
 		super()
 		this.host = host
@@ -98,17 +98,20 @@ class DTClient extends EventEmitter {
 			this.once('closed', onClose)
 		})
 	}
-	change(channel, mutate) {
+	change(channel, mutate, signal) {
 		const action = async () => {
+			signal?.throwIfAborted()
 			if (!Number.isInteger(channel) || channel < 1 || channel > 16) throw Error('Channel must be 1–16')
 			await this.refresh()
 			const before = { ...this.states.get(channel) }
 			if (!before || !before.seen) throw Error('No current preamp state')
 			const wanted = mutate({ ...before })
+			signal?.throwIfAborted()
+			const command = p.set(this.id, ++this.sequence, channel, wanted)
 			const confirmed = this.waitPacket((d) =>
 				d.states.some((s) => s.channel === channel && s.rawGain === wanted.rawGain && s.flags === wanted.flags),
 			)
-			this.send(p.set(this.id, ++this.sequence, channel, wanted))
+			this.send(command)
 				.then(() => this.send(p.poll(this.id, ++this.sequence)))
 				.catch((e) => this.emit('fault', e))
 			await confirmed
@@ -130,4 +133,3 @@ class DTClient extends EventEmitter {
 		}
 	}
 }
-module.exports = { DTClient }
